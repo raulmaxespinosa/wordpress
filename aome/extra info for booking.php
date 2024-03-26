@@ -1,11 +1,15 @@
 <?php
-// Add custom section before billing details
+/*
+ * This script is designed to enhance the WooCommerce checkout process by adding custom fields to orders based on product category or tags.
+ * It validates one of the custom fields to allow checkout to continue and saves all custom data to the database.
+ */
+
+// Add a custom section before billing details on the checkout page
 add_action('woocommerce_before_checkout_billing_form', 'custom_checkout_section');
 
 function custom_checkout_section() {
-    // Define the product categories to check
+    // Define the product categories and tags to check against the products in the cart
     $categories_to_check = array('Ultrasound Packages', 'Another Category', 'Yet Another Category');
-    // Define the product tags to check
     $tags_to_check = array('Tag1', 'Tag2', 'Tag3', 'Tag4');
 
     // Check if any product in the cart belongs to the defined categories or tags
@@ -29,16 +33,17 @@ function custom_checkout_section() {
         }
     }
 
-    // If no product from the defined categories or tags is in the cart, return
+    // If no product from the defined categories or tags is in the cart, return without adding the custom section
     if ( ! $category_check && ! $tag_check ) {
         return;
     }
 
+    // Add the custom section for pregnancy information
     echo '<div id="custom-checkout-section">';
     echo '<h3>Pregnancy Information</h3>';
     echo '<p>Please provide the following details:</p>';
 
-    // Security contact person text field
+    // Add the custom fields for weeks number, due date, additional info, disclaimer, and cancellation fee
     woocommerce_form_field('weeks_number', array(
         'type' => 'text',
         'class' => array('form-row-first'),
@@ -46,7 +51,6 @@ function custom_checkout_section() {
         'required' => true,
     ));
 
-    // Due date field
     woocommerce_form_field('due_date', array(
         'type' => 'date',
         'class' => array('form-row-last'),
@@ -54,7 +58,6 @@ function custom_checkout_section() {
         'required' => true,
     ));
 
-    // Additional information text area
     woocommerce_form_field('additional_info', array(
         'type' => 'textarea',
         'class' => array('form-row-wide'),
@@ -63,7 +66,6 @@ function custom_checkout_section() {
         'placeholder' => 'Enter any additional details here...',
     ));
 
-    // Disclaimer checkbox
     woocommerce_form_field('disclaimer_checkbox', array(
         'type' => 'checkbox',
         'class' => array('form-row-wide'),
@@ -71,7 +73,6 @@ function custom_checkout_section() {
         'required' => true,
     ));
 
-    // Disclaimer checkbox
     woocommerce_form_field('cancelation_fee_checkbox', array(
         'type' => 'checkbox',
         'class' => array('form-row-wide'),
@@ -82,7 +83,7 @@ function custom_checkout_section() {
     echo '</div>';
 }
 
-// Validate checkout form submission
+// Validate the checkout form submission by checking the disclaimer checkbox
 add_action('woocommerce_checkout_process', 'validate_checkout_fields');
 
 function validate_checkout_fields() {
@@ -91,7 +92,7 @@ function validate_checkout_fields() {
     }
 }
 
-// Save custom fields to order meta data
+// Save the custom fields to the order meta data
 add_action('woocommerce_checkout_create_order', 'save_custom_fields_to_order');
 
 function save_custom_fields_to_order($order) {
@@ -106,8 +107,5 @@ function save_custom_fields_to_order($order) {
     if (!empty($_POST['additional_info'])) {
         $order->update_meta_data('_additional_info', sanitize_text_field($_POST['additional_info']));
     }
-
-    if (!empty($_POST['cancelation_fee_checkbox'])) {
-        $order->update_meta_data('_cancelation_fee_checkbox', sanitize_text_field($_POST['cancelation_fee_checkbox']));
-    }
 }
+?>
