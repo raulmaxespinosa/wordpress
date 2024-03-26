@@ -6,7 +6,7 @@ function custom_checkout_section() {
     // Define the product categories to check
     $categories_to_check = array('Ultrasound Packages', 'Another Category', 'Yet Another Category');
     // Define the product tags to check
-    $tags_to_check = array('Tag1', 'Tag2', 'Tag3');
+    $tags_to_check = array('Tag1', 'Tag2', 'Tag3', 'Tag4');
 
     // Check if any product in the cart belongs to the defined categories or tags
     $category_check = false;
