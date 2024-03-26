@@ -39,7 +39,7 @@ function custom_checkout_section() {
     }
 
     // Add the custom section for pregnancy information
-    echo '<div id="custom-checkout-section">';
+    echo '<style>#custom-checkout-section {background-color: #e8f3e8; padding: 10px; border: 1px solid lightgray; border-radius: 10px;}</style><div id="custom-checkout-section">';
     echo '<h3>Pregnancy Information</h3>';
     echo '<p>Please provide the following details:</p>';
 
